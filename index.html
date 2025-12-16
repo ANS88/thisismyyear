@@ -30,13 +30,6 @@
         #root {
             width: 100%;
         }
-
-        .icon {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            vertical-align: middle;
-        }
     </style>
 </head>
 <body>
@@ -45,35 +38,38 @@
     <script type="text/babel">
         const { useState, useMemo } = React;
 
-        // All 42 events data
+        // All 49 events - UPDATED from Google Sheet
         const ALL_EVENTS = [
-          { name: 'Oaxaca', start: '2025-01-01', end: '2025-01-04', people: ['Polly'], country: 'Mexico', types: ['Travel'], intensity: 3 },
+          { name: 'Oaxaca city', start: '2025-01-01', end: '2025-01-04', people: ['Polly'], country: 'Mexico', types: ['Travel', 'Hiking'], intensity: 3 },
           { name: 'Guadalajara', start: '2025-01-04', end: '2025-01-18', people: ['MX Fam'], country: 'Mexico', types: ['Travel'], intensity: 4 },
+          { name: 'Promoted to Manager', start: '2025-02-14', end: '2025-02-14', people: ['Solo'], country: 'USA', types: ['Career'], intensity: 5 },
           { name: 'PhD Defense', start: '2025-02-21', end: '2025-02-21', people: ['Solo'], country: 'USA', types: ['Career'], intensity: 5 },
+          { name: 'Lane8', start: '2025-03-08', end: '2025-03-08', people: ['Polly', 'Polly Friends'], country: 'USA', types: ['Shows'], intensity: 4 },
           { name: 'Mexico City', start: '2025-03-18', end: '2025-03-19', people: ['Polly'], country: 'Mexico', types: ['Travel'], intensity: 3 },
-          { name: 'Puerto Escondido', start: '2025-03-19', end: '2025-03-22', people: ['Polly', 'Polly Friends'], country: 'Mexico', types: ['Travel'], intensity: 4 },
+          { name: 'Puerto Escondido', start: '2025-03-19', end: '2025-03-22', people: ['Polly Friends', 'Polly'], country: 'Mexico', types: ['Travel'], intensity: 4 },
+          { name: 'Day breakers', start: '2025-04-05', end: '2025-04-05', people: ['Polly', 'Raniti Friends'], country: 'USA', types: ['Shows'], intensity: 4 },
           { name: 'Lima', start: '2025-04-14', end: '2025-04-16', people: ['Raniti Friends'], country: 'Peru', types: ['Travel'], intensity: 4 },
           { name: 'Cusco', start: '2025-04-16', end: '2025-04-18', people: ['Raniti Friends'], country: 'Peru', types: ['Travel'], intensity: 3 },
-          { name: 'Inca Trail', start: '2025-04-18', end: '2025-04-22', people: ['Raniti Friends'], country: 'Peru', types: ['Travel', 'Workout'], intensity: 5 },
-          { name: 'Rainbow Mountain', start: '2025-04-23', end: '2025-04-23', people: ['Raniti Friends'], country: 'Peru', types: ['Travel', 'Workout'], intensity: 5 },
+          { name: 'Inca Trail', start: '2025-04-18', end: '2025-04-22', people: ['Raniti Friends'], country: 'Peru', types: ['Travel', 'Hiking'], intensity: 5 },
+          { name: 'Rainbow Mountain', start: '2025-04-23', end: '2025-04-23', people: ['Raniti Friends'], country: 'Peru', types: ['Travel', 'Hiking'], intensity: 5 },
           { name: 'Cusco', start: '2025-04-23', end: '2025-04-25', people: ['Raniti Friends'], country: 'Peru', types: ['Travel'], intensity: 3 },
           { name: 'Lima', start: '2025-04-25', end: '2025-04-26', people: ['Raniti Friends'], country: 'Peru', types: ['Travel'], intensity: 3 },
           { name: 'Got Engaged', start: '2025-04-27', end: '2025-04-27', people: ['Polly'], country: 'USA', types: ['Love'], intensity: 5 },
           { name: 'Cincinnati', start: '2025-04-29', end: '2025-05-03', people: ['Raniti Friends', 'Polly', 'MX Fam', 'US Fam'], country: 'USA', types: ['Travel'], intensity: 4 },
-          { name: 'Graduated PhD', start: '2025-05-01', end: '2025-05-01', people: ['MX Fam', 'US Fam', 'Polly'], country: 'USA', types: ['Travel', 'Career'], intensity: 5 },
-          { name: 'Hocking Hills', start: '2025-05-03', end: '2025-05-05', people: ['MX Fam', 'Polly'], country: 'USA', types: ['Travel'], intensity: 3 },
+          { name: 'Graduated with PhD', start: '2025-05-01', end: '2025-05-01', people: ['MX Fam', 'US Fam', 'Polly'], country: 'USA', types: ['Travel', 'Career'], intensity: 5 },
+          { name: 'Hocking Hills', start: '2025-05-03', end: '2025-05-05', people: ['MX Fam', 'Polly'], country: 'USA', types: ['Travel', 'Hiking'], intensity: 3 },
           { name: 'Chicago', start: '2025-05-07', end: '2025-05-11', people: ['MX Fam', 'Polly'], country: 'USA', types: ['Travel'], intensity: 3 },
           { name: 'Pittsburgh', start: '2025-05-11', end: '2025-05-16', people: ['MX Fam'], country: 'USA', types: ['Travel'], intensity: 2 },
           { name: 'West Virginia', start: '2025-05-16', end: '2025-05-17', people: ['US Fam', 'Polly Friends'], country: 'USA', types: ['Travel'], intensity: 2 },
-          { name: 'Healdsburg', start: '2025-06-14', end: '2025-06-14', people: ['Polly'], country: 'USA', types: ['Travel'], intensity: 2 },
+          { name: 'Healdsburg, CA', start: '2025-06-14', end: '2025-06-14', people: ['Polly'], country: 'USA', types: ['Travel', 'Kayaking'], intensity: 2 },
           { name: 'Munich', start: '2025-06-17', end: '2025-06-17', people: ['Solo'], country: 'Germany', types: ['Travel'], intensity: 2 },
           { name: 'Vienna', start: '2025-06-18', end: '2025-06-20', people: ['MX Fam'], country: 'Austria', types: ['Travel'], intensity: 3 },
           { name: 'Budapest', start: '2025-06-20', end: '2025-06-23', people: ['MX Fam', 'Raniti Friends'], country: 'Hungary', types: ['Travel'], intensity: 4 },
           { name: 'Belgrade', start: '2025-06-23', end: '2025-06-28', people: ['Coworkers'], country: 'Serbia', types: ['Travel', 'Career'], intensity: 3 },
           { name: 'Shakira', start: '2025-06-30', end: '2025-06-30', people: ['Raniti Friends'], country: 'USA', types: ['Shows'], intensity: 4 },
           { name: 'Tahoe Camping', start: '2025-07-03', end: '2025-07-05', people: ['Raniti Friends', 'Polly'], country: 'USA', types: ['Travel'], intensity: 4 },
-          { name: 'Sonoma Biking', start: '2025-07-11', end: '2025-07-13', people: ['Polly', 'Raniti Friends', 'US Fam'], country: 'USA', types: ['Travel', 'Workout'], intensity: 4 },
-          { name: 'Regina Spektor', start: '2025-07-22', end: '2025-07-22', people: ['Solo'], country: 'USA', types: ['Shows'], intensity: 3 },
+          { name: 'Sonoma Biking', start: '2025-07-11', end: '2025-07-13', people: ['Polly', 'Raniti Friends', 'US Fam'], country: 'USA', types: ['Travel', 'Camping', 'Hiking'], intensity: 4 },
+          { name: 'Regina Spektor', start: '2025-07-22', end: '2025-07-22', people: ['Solo'], country: 'USA', types: ['Shows', 'Cycling'], intensity: 3 },
           { name: 'Outside Lands', start: '2025-08-09', end: '2025-08-09', people: ['Polly', 'Polly Friends'], country: 'USA', types: ['Shows'], intensity: 4 },
           { name: 'Denver', start: '2025-08-15', end: '2025-08-18', people: ['Polly', 'Polly Friends'], country: 'USA', types: ['Shows'], intensity: 3 },
           { name: 'Breckenridge', start: '2025-08-18', end: '2025-08-22', people: ['Coworkers'], country: 'USA', types: ['Travel', 'Career'], intensity: 3 },
@@ -83,12 +79,16 @@
           { name: 'Stanford Course', start: '2025-09-24', end: '2025-10-22', people: ['Solo'], country: 'USA', types: ['Career'], intensity: 2 },
           { name: 'Engagement Photos', start: '2025-10-07', end: '2025-10-07', people: ['Polly'], country: 'USA', types: ['Love'], intensity: 3 },
           { name: 'Yellowstone', start: '2025-10-11', end: '2025-10-18', people: ['Polly'], country: 'USA', types: ['Travel'], intensity: 4 },
+          { name: 'Coco at SF Symphony', start: '2025-10-29', end: '2025-10-29', people: ['Polly'], country: 'USA', types: ['Shows'], intensity: 4 },
           { name: 'NYC Bachelorette', start: '2025-11-13', end: '2025-11-16', people: ['Raniti Friends'], country: 'USA', types: ['Love'], intensity: 5 },
           { name: 'Pittsburgh', start: '2025-11-16', end: '2025-11-29', people: ['US Fam', 'MX Fam', 'Polly'], country: 'USA', types: ['Travel'], intensity: 3 },
           { name: 'Engagement Party', start: '2025-11-22', end: '2025-11-22', people: ['Polly Friends', 'Raniti Friends', 'US Fam', 'MX Fam', 'Polly'], country: 'USA', types: ['Love'], intensity: 5 },
           { name: 'Got Married!', start: '2025-11-22', end: '2025-11-22', people: ['Polly'], country: 'USA', types: ['Love'], intensity: 5 },
+          { name: 'Turkey Trot', start: '2025-11-27', end: '2025-11-27', people: ['Polly'], country: 'USA', types: ['Running', 'Travel'], intensity: 3 },
           { name: 'Seattle', start: '2025-12-11', end: '2025-12-16', people: ['Raniti Friends'], country: 'USA', types: ['Travel'], intensity: 3 },
-          { name: 'Austin', start: '2025-12-16', end: '2025-12-18', people: ['Coworkers'], country: 'USA', types: ['Travel'], intensity: 2 }
+          { name: 'Austin', start: '2025-12-16', end: '2025-12-18', people: ['Coworkers'], country: 'USA', types: ['Travel'], intensity: 2 },
+          { name: 'Amelia Island', start: '2025-12-20', end: '2025-12-26', people: ['Polly', 'US Fam'], country: 'USA', types: ['Travel'], intensity: 4 },
+          { name: 'Daytona Beach', start: '2025-12-26', end: '2025-12-28', people: ['Polly'], country: 'USA', types: ['Travel'], intensity: 3 }
         ];
 
         // Sankey Flow Visualization
@@ -113,11 +113,11 @@
           }, [events]);
 
           const people = ['Solo', 'Polly', 'MX Fam', 'US Fam', 'Raniti Friends', 'Polly Friends', 'Coworkers'];
-          const types = ['Travel', 'Love', 'Career', 'Shows', 'Workout', 'Babymaking'];
+          const types = ['Travel', 'Love', 'Career', 'Shows', 'Hiking', 'Camping', 'Cycling', 'Kayaking', 'Running', 'Babymaking'];
           const leftX = 100;
           const rightX = 700;
-          const nodeHeight = 50;
-          const nodeGap = 15;
+          const nodeHeight = 40;
+          const nodeGap = 10;
 
           return (
             <div style={{
@@ -130,14 +130,14 @@
                 Sankey Flow: People → Activities
               </h2>
 
-              <svg width="900" height="600" style={{ display: 'block', margin: '0 auto' }}>
+              <svg width="900" height="700" style={{ display: 'block', margin: '0 auto' }}>
                 {people.map((person, i) => {
-                  const y = i * (nodeHeight + nodeGap) + 50;
+                  const y = i * (nodeHeight + nodeGap) + 30;
                   return (
                     <g key={person}>
-                      <rect x={leftX} y={y} width={150} height={nodeHeight} fill={colors.people[person]} rx="10" />
+                      <rect x={leftX} y={y} width={150} height={nodeHeight} fill={colors.people[person]} rx="8" />
                       <text x={leftX + 75} y={y + nodeHeight / 2} textAnchor="middle" dominantBaseline="middle" 
-                        style={{ fill: '#ffffff', fontSize: '14px', fontWeight: 700 }}>
+                        style={{ fill: '#ffffff', fontSize: '12px', fontWeight: 700 }}>
                         {person}
                       </text>
                     </g>
@@ -145,12 +145,12 @@
                 })}
 
                 {types.map((type, i) => {
-                  const y = i * (nodeHeight + nodeGap) + 50;
+                  const y = i * (nodeHeight + nodeGap) + 30;
                   return (
                     <g key={type}>
-                      <rect x={rightX} y={y} width={150} height={nodeHeight} fill={colors.types[type]} rx="10" />
+                      <rect x={rightX} y={y} width={150} height={nodeHeight} fill={colors.types[type]} rx="8" />
                       <text x={rightX + 75} y={y + nodeHeight / 2} textAnchor="middle" dominantBaseline="middle"
-                        style={{ fill: '#ffffff', fontSize: '14px', fontWeight: 700 }}>
+                        style={{ fill: '#ffffff', fontSize: '12px', fontWeight: 700 }}>
                         {type}
                       </text>
                     </g>
@@ -160,8 +160,9 @@
                 {flows.map((flow, i) => {
                   const personIdx = people.indexOf(flow.person);
                   const typeIdx = types.indexOf(flow.type);
-                  const y1 = personIdx * (nodeHeight + nodeGap) + 50 + nodeHeight / 2;
-                  const y2 = typeIdx * (nodeHeight + nodeGap) + 50 + nodeHeight / 2;
+                  if (personIdx === -1 || typeIdx === -1) return null;
+                  const y1 = personIdx * (nodeHeight + nodeGap) + 30 + nodeHeight / 2;
+                  const y2 = typeIdx * (nodeHeight + nodeGap) + 30 + nodeHeight / 2;
                   const isHovered = hoveredFlow === i;
                   const strokeWidth = Math.max(2, flow.days / 2);
                   
@@ -241,7 +242,14 @@
             const endDay = getDayOfYear(event.end);
             const days = Math.floor((new Date(event.end) - new Date(event.start)) / (1000 * 60 * 60 * 24)) + 1;
             const primaryType = event.types[0];
-            const radiusOffset = primaryType === 'Love' ? 0.90 : primaryType === 'Career' ? 0.45 : primaryType === 'Shows' ? 0.75 : primaryType === 'Workout' ? 0.65 : primaryType === 'Babymaking' ? 0.85 : 0.6;
+            const radiusOffset = 
+              primaryType === 'Love' ? 0.90 : 
+              primaryType === 'Career' ? 0.45 : 
+              primaryType === 'Shows' ? 0.75 : 
+              primaryType === 'Hiking' ? 0.65 :
+              primaryType === 'Running' ? 0.70 :
+              primaryType === 'Babymaking' ? 0.85 : 
+              0.6;
             const eventRadius = innerRadius + ((outerRadius - innerRadius) * radiusOffset);
             return { ...event, startDay, endDay, days, eventRadius, primaryType };
           });
@@ -389,11 +397,41 @@
           });
 
           const colors = {
-            people: { 'Solo': '#1B998B', 'Polly': '#C44569', 'MX Fam': '#D97832', 'US Fam': '#2D5F8D', 'Raniti Friends': '#5FA052', 'Polly Friends': '#E8871E', 'Coworkers': '#8B4789' },
-            types: { 'Travel': '#5FA052', 'Love': '#C44569', 'Career': '#2D5F8D', 'Shows': '#E8871E', 'Workout': '#1B998B', 'Babymaking': '#FF6B9D' }
+            people: { 
+              'Solo': '#1B998B', 
+              'Polly': '#C44569', 
+              'MX Fam': '#D97832', 
+              'US Fam': '#2D5F8D', 
+              'Raniti Friends': '#5FA052', 
+              'Polly Friends': '#E8871E', 
+              'Coworkers': '#8B4789' 
+            },
+            types: { 
+              'Travel': '#5FA052', 
+              'Love': '#C44569', 
+              'Career': '#2D5F8D', 
+              'Shows': '#E8871E', 
+              'Hiking': '#1B998B',
+              'Camping': '#7B68BE',
+              'Cycling': '#F093FB',
+              'Kayaking': '#4ECDC4',
+              'Running': '#FF6B6B',
+              'Babymaking': '#FF6B9D' 
+            }
           };
 
-          const countryFlags = { 'USA': '🇺🇸', 'Mexico': '🇲🇽', 'Peru': '🇵🇪', 'Germany': '🇩🇪', 'Austria': '🇦🇹', 'Hungary': '🇭🇺', 'Serbia': '🇷🇸' };
+          const countryFlags = { 
+            'USA': '🇺🇸', 
+            'Mexico': '🇲🇽', 
+            'Peru': '🇵🇪', 
+            'Germany': '🇩🇪', 
+            'Austria': '🇦🇹', 
+            'Hungary': '🇭🇺', 
+            'Serbia': '🇷🇸' 
+          };
+
+          const totalDays = eventsWithDays.reduce((sum, e) => sum + e.days, 0);
+          const concerts = eventsWithDays.filter(e => e.types.includes('Shows')).length;
 
           return (
             <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #0F2027 0%, #203A43 50%, #2C5364 100%)', color: '#f5f5f5', fontFamily: '"Poppins", sans-serif', padding: '40px 20px' }}>
@@ -405,7 +443,7 @@
                     2025 TRIPLE VIEW
                   </h1>
                   <p style={{ fontSize: '18px', color: '#a8b2d1', margin: 0, letterSpacing: '2px' }}>
-                    42 Events • 7 Countries • 182 Days • 3 Visualizations
+                    {eventsWithDays.length} Events • 7 Countries • {totalDays} Days • 3 Visualizations
                   </p>
                 </div>
 
@@ -429,10 +467,10 @@
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '15px', marginBottom: '30px' }}>
                   {[
-                    { label: 'Events', value: 42, color: '#667eea' },
-                    { label: 'Days', value: 182, color: '#f093fb' },
+                    { label: 'Events', value: eventsWithDays.length, color: '#667eea' },
+                    { label: 'Days', value: totalDays, color: '#f093fb' },
                     { label: 'Countries', value: 7, color: '#5FA052' },
-                    { label: 'Concerts', value: 5, color: '#E8871E' }
+                    { label: 'Shows', value: concerts, color: '#E8871E' }
                   ].map((stat, i) => (
                     <div key={i} style={{ background: 'rgba(255,255,255,0.03)', border: `2px solid ${stat.color}40`, borderRadius: '12px', padding: '15px', textAlign: 'center' }}>
                       <div style={{ fontSize: '32px', fontWeight: 800, color: stat.color, marginBottom: '5px' }}>{stat.value}</div>
