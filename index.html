@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025 Year in Review</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0F2027 0%, #203A43 50%, #2C5364 100%);
+            color: #f5f5f5;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        h1 {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            color: #a8b2d1;
+            letter-spacing: 2px;
+        }
+        
+        .view-switcher {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .view-btn {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,255,255,0.1);
+            padding: 12px 30px;
+            border-radius: 25px;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .view-btn:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: #667eea;
+        }
+        
+        .view-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: #667eea;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .stat-card {
+            background: rgba(255,255,255,0.03);
+            border: 2px solid rgba(102,126,234,0.3);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 36px;
+            font-weight: 800;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 11px;
+            color: #8892b0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .view-content {
+            display: none;
+            background: rgba(255,255,255,0.03);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .view-content.active {
+            display: block;
+        }
+        
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .event-card {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 14px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .event-card:hover {
+            transform: translateY(-5px);
+            border-color: #667eea;
+            box-shadow: 0 10px 30px rgba(102,126,234,0.3);
+        }
+        
+        .event-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .event-date {
+            font-size: 13px;
+            color: #a8b2d1;
+            margin-bottom: 12px;
+        }
+        
+        .event-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        
+        .tag {
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: rgba(255,255,255,0.05);
+            border-left: 4px solid #667eea;
+            border-radius: 8px;
+        }
+        
+        .timeline-date {
+            font-size: 12px;
+            color: #667eea;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .timeline-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+        
+        .timeline-desc {
+            font-size: 14px;
+            color: #a8b2d1;
+        }
+        
+        .summary-section {
+            margin: 30px 0;
+            padding: 30px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .summary-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+        
+        .summary-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .summary-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            color: #a8b2d1;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .summary-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .highlight {
+            color: #667eea;
+            font-weight: 700;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 32px;
+            }
+            .events-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>2025 YEAR IN REVIEW</h1>
+            <p class="subtitle">42 Events • 7 Countries • 182 Days • A Year of Transformation</p>
+        </header>
+
+        <!-- Stats Overview -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">42</div>
+                <div class="stat-label">Events</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">7</div>
+                <div class="stat-label">Countries</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">182</div>
+                <div class="stat-label">Travel Days</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">5</div>
+                <div class="stat-label">Concerts</div>
+            </div>
+        </div>
+
+        <!-- View Switcher -->
+        <div class="view-switcher">
+            <button class="view-btn active" onclick="switchView('grid')">📊 Grid View</button>
+            <button class="view-btn" onclick="switchView('timeline')">📅 Timeline View</button>
+            <button class="view-btn" onclick="switchView('summary')">📈 Summary View</button>
+        </div>
+
+        <!-- Grid View -->
+        <div id="grid-view" class="view-content active">
+            <div class="events-grid">
+                <div class="event-card">
+                    <div class="event-title">
+                        <span>Oaxaca</span>
+                        <span>🇲🇽</span>
+                    </div>
+                    <div class="event-date">Jan 1-4 • 4 days</div>
+                    <div class="event-tags">
+                        <span class="tag">Polly</span>
+                        <span class="tag">Travel</span>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-title">
+                        <span>Guadalajara</span>
+                        <span>🇲🇽</span>
+                    </div>
+                    <div class="event-date">Jan 4-18 • 14 days</div>
+                    <div class="event-tags">
+                        <span class="tag">MX Fam</span>
+                        <span class="tag">Travel</span>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-title">
+                        <span>PhD Defense</span>
+                        <span>🇺🇸</span>
+                    </div>
+                    <div class="event-date">Feb 21 • 1 day</div>
+                    <div class="event-tags">
+                        <span class="tag">Solo</span>
+                        <span class="tag">Career</span>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-title">
+                        <span>Mexico City</span>
+                        <span>🇲🇽</span>
+                    </div>
+                    <div class="event-date">Mar 18-19 • 2 days</div>
+                    <div class="event-tags">
+                        <span class="tag">Polly</span>
+                        <span class="tag">Travel</span>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-title">
+                        <span>Puerto Escondido</span>
+                        <span>🇲🇽</span>
+                    </div>
+                    <div class="event-date">Mar 19-22 • 4 days</div>
+                    <div class="event-tags">
+                        <span class="tag">Polly</span>
+                        <span class="tag">Friends</span>
+                        <span class="tag">Travel</span>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-title">
+                        <span>Peru Adventure</span>
+                        <span>🇵🇪</span>
+                    </div>
+                    <div class="event-date">Apr 14-26 • 13 days</div>
+                    <div class="event-tags">
+                        <span class="tag">Raniti Friends</span>
+                        <span class="tag">Travel</span>
+                        <span class="tag">Workout</span>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-title">
+                        <span>Got Engaged 💍</span>
+                        <span>🇺🇸</span>
+                    </div>
+                    <div class="event-date">Apr 27 • 1 day</div>
+                    <div class="event-tags">
+                        <span class="tag">Polly</span>
+                        <span class="tag">Love</span>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-title">
+                        <span>Graduated PhD 🎓</span>
+                        <span>🇺🇸</span>
+                    </div>
+                    <div class="event-date">May 1 • 1 day</div>
+                    <div class="event-tags">
+                        <span class="tag">Both Families</span>
+                        <span class="tag">Career</span>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-title">
+                        <span>US Road Trip</span>
+                        <span>🇺🇸</span>
+                    </div>
+                    <div class="event-date">Apr 29 - May 17 • 19 days</div>
+                    <div class="event-tags">
+                        <span class="tag">Family</span>
+                        <span class="tag">Friends</span>
+                        <span class="tag">Travel</span>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-title">
+                        <span>Europe Tour</span>
+                        <span>🇪🇺</span>
+                    </div>
+                    <div class="event-date">Jun 14-28 • 15 days</div>
+                    <div class="event-tags">
+                        <span class="tag">MX Fam</span>
+                        <span class="tag">Coworkers</span>
+                        <span class="tag">Travel</span>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-title">
+                        <span>Shakira Concert 🎤</span>
+                        <span>🇺🇸</span>
+                    </div>
+                    <div class="event-date">Jun 30 • 1 day</div>
+                    <div class="event-tags">
+                        <span class="tag">Raniti Friends</span>
+                        <span class="tag">Shows</span>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-title">
+                        <span>Regina Spektor 🎤</span>
+                        <span>🇺🇸</span>
+                    </div>
+                    <div class="event-date">Jul 22 • 1 day</div>
+                    <div class="event-tags">
+                        <span class="tag">Solo</span>
+                        <span class="tag">Shows</span>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-title">
+                        <span>Outside Lands 🎸</span>
+                        <span>🇺🇸</span>
+                    </div>
+                    <div class="event-date">Aug 9 • 1 day</div>
+                    <div class="event-tags">
+                        <span class="tag">Polly</span>
+                        <span class="tag">Friends</span>
+                        <span class="tag">Shows</span>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-title">
+                        <span>Denver Shows 🎵</span>
+                        <span>🇺🇸</span>
+                    </div>
+                    <div class="event-date">Aug 15-18 • 4 days</div>
+                    <div class="event-tags">
+                        <span class="tag">Polly</span>
+                        <span class="tag">Friends</span>
+                        <span class="tag">Shows</span>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-title">
+                        <span>Embryo Freezing</span>
+                        <span>🇺🇸</span>
+                    </div>
+                    <div class="event-date">Aug 18-31 • 14 days</div>
+                    <div class="event-tags">
+                        <span class="tag">Solo</span>
+                        <span class="tag">Babymaking</span>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-title">
+                        <span>Rawayana Concert 🎶</span>
+                        <span>🇺🇸</span>
+                    </div>
+                    <div class="event-date">Sep 12 • 1 day</div>
+                    <div class="event-tags">
+                        <span class="tag">Raniti Friends</span>
+                        <span class="tag">Polly</span>
+                        <span class="tag">Shows</span>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-title">
+                        <span>Stanford Course</span>
+                        <span>🇺🇸</span>
+                    </div>
+                    <div class="event-date">Sep 24 - Oct 22 • 29 days</div>
+                    <div class="event-tags">
+                        <span class="tag">Solo</span>
+                        <span class="tag">Career</span>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-title">
+                        <span>Yellowstone</span>
+                        <span>🇺🇸</span>
+                    </div>
+                    <div class="event-date">Oct 11-18 • 8 days</div>
+                    <div class="event-tags">
+                        <span class="tag">Polly</span>
+                        <span class="tag">Travel</span>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-title">
+                        <span>NYC Bachelorette 🎉</span>
+                        <span>🇺🇸</span>
+                    </div>
+                    <div class="event-date">Nov 13-16 • 4 days</div>
+                    <div class="event-tags">
+                        <span class="tag">Raniti Friends</span>
+                        <span class="tag">Love</span>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-title">
+                        <span>Got Married! 💒</span>
+                        <span>🇺🇸</span>
+                    </div>
+                    <div class="event-date">Nov 22 • 1 day</div>
+                    <div class="event-tags">
+                        <span class="tag">Polly</span>
+                        <span class="tag">Everyone</span>
+                        <span class="tag">Love</span>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-title">
+                        <span>Seattle & Austin</span>
+                        <span>🇺🇸</span>
+                    </div>
+                    <div class="event-date">Dec 11-18 • 8 days</div>
+                    <div class="event-tags">
+                        <span class="tag">Friends</span>
+                        <span class="tag">Coworkers</span>
+                        <span class="tag">Travel</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Timeline View -->
+        <div id="timeline-view" class="view-content">
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">JANUARY - FEBRUARY 2025</div>
+                    <div class="timeline-title">🇲🇽 Mexico Adventures</div>
+                    <div class="timeline-desc">Started the year in Oaxaca with Polly, then 2 weeks with MX Family in Guadalajara</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">FEBRUARY 21, 2025</div>
+                    <div class="timeline-title">🎓 PhD Defense</div>
+                    <div class="timeline-desc">Defended dissertation and officially became Dr.!</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">MARCH 2025</div>
+                    <div class="timeline-title">🇲🇽 Back to Mexico</div>
+                    <div class="timeline-desc">Mexico City and Puerto Escondido beach trip with Polly and friends</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">APRIL 14-26, 2025</div>
+                    <div class="timeline-title">🇵🇪 Epic Peru Adventure</div>
+                    <div class="timeline-desc">13 days with Raniti Friends: Lima, Cusco, Inca Trail, Rainbow Mountain</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">APRIL 27, 2025</div>
+                    <div class="timeline-title">💍 Got Engaged!</div>
+                    <div class="timeline-desc">Polly proposed (or I did?) - we're engaged!</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">MAY 1, 2025</div>
+                    <div class="timeline-title">🎓 PhD Graduation</div>
+                    <div class="timeline-desc">Official graduation ceremony with both families and Polly present</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">APRIL 29 - MAY 17, 2025</div>
+                    <div class="timeline-title">🇺🇸 Cross-Country Family Tour</div>
+                    <div class="timeline-desc">Cincinnati, Hocking Hills, Chicago, Pittsburgh, West Virginia with families and friends</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">JUNE 14-28, 2025</div>
+                    <div class="timeline-title">🇪🇺 European Adventure</div>
+                    <div class="timeline-desc">Healdsburg, Munich, Vienna, Budapest, Belgrade - mix of family time and work</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">SUMMER 2025</div>
+                    <div class="timeline-title">🎵 Concert Season!</div>
+                    <div class="timeline-desc">5 amazing shows: Shakira, Regina Spektor, Outside Lands, Denver, Rawayana</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">AUGUST 2025</div>
+                    <div class="timeline-title">👶 Family Planning Journey</div>
+                    <div class="timeline-desc">Embryo freezing and egg retrieval process</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">SEPTEMBER - OCTOBER 2025</div>
+                    <div class="timeline-title">📚 Stanford Course</div>
+                    <div class="timeline-desc">29 days of continued education and professional development</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">OCTOBER 11-18, 2025</div>
+                    <div class="timeline-title">🏔️ Yellowstone</div>
+                    <div class="timeline-desc">Week-long national park adventure with Polly</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">NOVEMBER 2025</div>
+                    <div class="timeline-title">💒 Wedding Month!</div>
+                    <div class="timeline-desc">NYC Bachelorette, Engagement Party, and THE WEDDING on November 22nd!</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">DECEMBER 2025</div>
+                    <div class="timeline-title">🎄 Year-End Travels</div>
+                    <div class="timeline-desc">Seattle with friends, Austin with coworkers - wrapping up an incredible year</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary View -->
+        <div id="summary-view" class="view-content">
+            <div class="summary-section">
+                <div class="summary-title">📊 2025 By The Numbers</div>
+                <ul class="summary-list">
+                    <li><span>Total Events</span> <span class="highlight">42</span></li>
+                    <li><span>Countries Visited</span> <span class="highlight">7 (🇺🇸 🇲🇽 🇵🇪 🇩🇪 🇦🇹 🇭🇺 🇷🇸)</span></li>
+                    <li><span>Continents</span> <span class="highlight">3 (North America, South America, Europe)</span></li>
+                    <li><span>Total Travel Days</span> <span class="highlight">182 days</span></li>
+                    <li><span>Concerts Attended</span> <span class="highlight">5</span></li>
+                </ul>
+            </div>
+
+            <div class="summary-section">
+                <div class="summary-title">👥 Time With People</div>
+                <ul class="summary-list">
+                    <li><span>Polly</span> <span class="highlight">63 days (1,512 hours)</span></li>
+                    <li><span>MX Family</span> <span class="highlight">57 days (1,368 hours)</span></li>
+                    <li><span>Solo Time</span> <span class="highlight">47 days (1,128 hours)</span></li>
+                    <li><span>Raniti Friends</span> <span class="highlight">45 days (1,080 hours)</span></li>
+                    <li><span>US Family</span> <span class="highlight">26 days (624 hours)</span></li>
+                    <li><span>Coworkers</span> <span class="highlight">14 days (336 hours)</span></li>
+                    <li><span>Polly Friends</span> <span class="highlight">12 days (288 hours)</span></li>
+                </ul>
+            </div>
+
+            <div class="summary-section">
+                <div class="summary-title">🗺️ Geography Breakdown</div>
+                <ul class="summary-list">
+                    <li><span>🇺🇸 USA</span> <span class="highlight">126 days (16+ destinations)</span></li>
+                    <li><span>🇲🇽 Mexico</span> <span class="highlight">25 days (Oaxaca, Guadalajara, Mexico City, Puerto Escondido)</span></li>
+                    <li><span>🇵🇪 Peru</span> <span class="highlight">17 days (Lima, Cusco, Inca Trail, Rainbow Mountain)</span></li>
+                    <li><span>🇷🇸 Serbia</span> <span class="highlight">6 days (Belgrade)</span></li>
+                    <li><span>🇭🇺 Hungary</span> <span class="highlight">4 days (Budapest)</span></li>
+                    <li><span>🇦🇹 Austria</span> <span class="highlight">3 days (Vienna)</span></li>
+                    <li><span>🇩🇪 Germany</span> <span class="highlight">1 day (Munich)</span></li>
+                </ul>
+            </div>
+
+            <div class="summary-section">
+                <div class="summary-title">🎯 Event Categories</div>
+                <ul class="summary-list">
+                    <li><span>Travel Events</span> <span class="highlight">28 events (121 days)</span></li>
+                    <li><span>Career Milestones</span> <span class="highlight">5 events (42 days)</span></li>
+                    <li><span>Love & Relationships</span> <span class="highlight">5 events (8 days)</span></li>
+                    <li><span>Concerts & Shows</span> <span class="highlight">5 events (8 days)</span></li>
+                    <li><span>Workout Adventures</span> <span class="highlight">3 events (9 days)</span></li>
+                    <li><span>Family Planning</span> <span class="highlight">2 events (15 days)</span></li>
+                </ul>
+            </div>
+
+            <div class="summary-section">
+                <div class="summary-title">✨ Major Milestones</div>
+                <ul class="summary-list">
+                    <li>🎓 <span class="highlight">Defended PhD</span> (February 21)</li>
+                    <li>🎓 <span class="highlight">Graduated with PhD</span> (May 1)</li>
+                    <li>💍 <span class="highlight">Got Engaged</span> (April 27)</li>
+                    <li>💒 <span class="highlight">Got Married!</span> (November 22)</li>
+                    <li>👶 <span class="highlight">Started Family Planning Journey</span> (August)</li>
+                    <li>📚 <span class="highlight">Completed Stanford Course</span> (Sep-Oct)</li>
+                </ul>
+            </div>
+
+            <div class="summary-section">
+                <div class="summary-title">🎵 Concert List</div>
+                <ul class="summary-list">
+                    <li>1. <span class="highlight">Shakira</span> (June 30)</li>
+                    <li>2. <span class="highlight">Regina Spektor</span> (July 22)</li>
+                    <li>3. <span class="highlight">Outside Lands Festival</span> (August 9)</li>
+                    <li>4. <span class="highlight">Denver Shows</span> (August 15-18)</li>
+                    <li>5. <span class="highlight">Rawayana & Bomba Estéreo</span> (September 12)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchView(viewName) {
+            // Hide all views
+            document.querySelectorAll('.view-content').forEach(view => {
+                view.classList.remove('active');
+            });
+            
+            // Remove active from all buttons
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected view
+            document.getElementById(viewName + '-view').classList.add('active');
+            
+            // Activate clicked button
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
